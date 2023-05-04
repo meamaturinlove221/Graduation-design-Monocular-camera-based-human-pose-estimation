@@ -1,2 +1,1 @@
-# Graduation-design-Monocular-camera-based-human-pose-estimation
-Graduation design
+you can run VideoPose3D by this code
