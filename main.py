@@ -1,6 +1,6 @@
 # 导入pywebio和其他需要的库
 import torch
-from pywebio.output import put_file, put_image, put_processbar, put_text, put_markdown, put_code, set_processbar, \
+from pywebio.output import put_file, put_processbar, put_text, put_markdown, put_code, set_processbar, \
     set_progressbar, use_scope
 from pywebio.input import file_upload
 import os
@@ -97,7 +97,7 @@ def app():
             put_file('output.mp4', content, 'download me')
 
             # 创建模型对象
-            model_pos = common.model.Model()
+            model_pos = common.model.TemporalModel()
 
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
@@ -108,6 +108,7 @@ def app():
             # 使用model_pos.load_state_dict函数来加载模型的参数
             model_pos.load_state_dict(
                 torch.load('checkpoint/pretrained_h36m_detectron_coco.bin', map_location='cpu')['model_pos'])
+            #model_pos = TemporalModel(17, 2, 17, filter_widths=[3, 3], causal=False, dropout=0.5, channels=1024)
             # 创建一个空的数组来存储图像中的2D关键点数据，它的形状是(N, J, 2)
             image_2d = np.zeros((input_2d.shape[0], input_2d.shape[1], 2))
             # 对每一帧的2D关键点数据进行处理，将其转换为像素坐标，并存储到输出数组中
