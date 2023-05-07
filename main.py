@@ -1,17 +1,17 @@
 # 导入pywebio和其他需要的库
 import torch
-from pywebio import start_server
 from pywebio.output import put_file, put_image, put_processbar, put_text, put_markdown, put_code, set_processbar, \
     set_progressbar, use_scope
 from pywebio.input import file_upload
 import os
-import shutil
+
 import subprocess
 import numpy as np
-import matplotlib.pyplot as plt
-import cv2
 
-from run import model_pos
+
+#from run import model_pos
+import common.model
+
 
 # 定义相机内参和外参，这里只是示例，你需要根据你的实际情况进行修改
 # 相机内参矩阵，包含焦距和主点坐标
@@ -95,6 +95,9 @@ def app():
 
             content = open('./output.mp4', 'rb').read()
             put_file('output.mp4', content, 'download me')
+
+            # 创建模型对象
+            model_pos = common.model.Model()
 
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
