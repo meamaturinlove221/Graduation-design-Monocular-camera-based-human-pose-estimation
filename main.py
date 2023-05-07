@@ -87,6 +87,15 @@ def app():
             cmd = f"python run.py -d custom -k myvideos -arc 3,3,3,3,3 -c checkpoint --evaluate pretrained_h36m_detectron_coco.bin --render --viz-subject input.mp4 --viz-action custom --viz-camera 0 --viz-video inference/input_directory/input.mp4 --viz-output output.mp4 --viz-size 6"
             output = subprocess.getoutput(cmd)
             put_code(output)
+
+            # 更新进度条为完成状态
+            set_processbar('process_bar', 1.0)
+            # 使用put_image函数来在网页上显示可视化的结果
+            # put_image(open(gif_path, "rb").read())
+
+            content = open('./output.mp4', 'rb').read()
+            put_file('output.mp4', content, 'download me')
+
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
             # 获取文件中的键名，假设有三个键，分别是'epoch', 'lr'和'model_pos'
@@ -132,13 +141,6 @@ def app():
                 output_2d[i] = joints_2d
             # 将输出数组保存为npy文件
             np.save('output_2d.npy', output_2d)
-            # 更新进度条为完成状态
-            set_processbar('process_bar', 1.0)
-            # 使用put_image函数来在网页上显示可视化的结果
-            #put_image(open(gif_path, "rb").read())
-
-            content = open('./output.mp4', 'rb').read()
-            put_file('output.mp4', content, 'download me')
 
             # 定义一个函数来计算投影损失并进行迭代优化
             def optimize():
