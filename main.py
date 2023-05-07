@@ -8,9 +8,9 @@ import os
 import subprocess
 import numpy as np
 
-
-#from run import model_pos
-import common.model
+import run
+from run import model_pos
+#import common.model
 
 
 # 定义相机内参和外参，这里只是示例，你需要根据你的实际情况进行修改
@@ -97,7 +97,7 @@ def app():
             put_file('output.mp4', content, 'download me')
 
             # 创建模型对象
-            model_pos = common.model.TemporalModel()
+            model_pos = run.model_pos
 
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
