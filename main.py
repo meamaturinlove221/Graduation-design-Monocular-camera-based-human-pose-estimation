@@ -4,13 +4,10 @@ from pywebio.output import put_file, put_processbar, put_text, put_markdown, put
     set_progressbar, use_scope
 from pywebio.input import file_upload
 import os
-
 import subprocess
 import numpy as np
-
 import run
-from run import model_pos
-#import common.model
+
 
 
 # 定义相机内参和外参，这里只是示例，你需要根据你的实际情况进行修改
@@ -101,12 +98,11 @@ def app():
 
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
-            # 获取文件中的键名，假设有三个键，分别是'epoch', 'lr'和'model_pos'
+            # 获取文件中的键名，打印出来看看
             key_names = input_2d_file.files
-            # 使用方括号来索引对应的数据，假设你想加载'model_pos'这个键的数据，它的形状是(N, J, 2)
-            input_2d = input_2d_file['model_pos']
-            # 使用方括号来索引对应的数据，假设你想加载'model_pos'这个键的数据，它的形状是(N, J, 2)
-            input_2d = input_2d_file['model_pos']
+            print("Key names:", key_names)
+            # 使用方括号来索引对应的数据，根据打印出来的键名选择一个，例如'keypoints'
+            input_2d = input_2d_file['keypoints']
             # 使用model_pos.load_state_dict函数来加载模型的参数
             state_dict = torch.load('checkpoint/pretrained_h36m_detectron_coco.bin', map_location='cpu')['model_pos']
             # 如果模型和state_dict的键不完全一致，可以使用strict=False参数来忽略不匹配的部分
