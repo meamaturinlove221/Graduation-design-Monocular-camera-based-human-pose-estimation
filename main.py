@@ -95,14 +95,14 @@ def app():
 
             # 创建模型对象
             model_pos = run.model_pos
-
             # 加载视频2d关节点推测结果的input.mp4.npz文件
             input_2d_file = np.load('inference/output_directory/input.mp4.npz')
             # 获取文件中的键名，打印出来看看
             key_names = input_2d_file.files
             print("Key names:", key_names)
             # 使用方括号来索引对应的数据，根据打印出来的键名选择一个，例如'keypoints'
-            input_2d = input_2d_file['keypoints']
+            data = np.load('inference/output_directory/input.mp4.npz', allow_pickle=True)
+            input_2d = data['keypoints']
             # 使用model_pos.load_state_dict函数来加载模型的参数
             state_dict = torch.load('checkpoint/pretrained_h36m_detectron_coco.bin', map_location='cpu')['model_pos']
             # 如果模型和state_dict的键不完全一致，可以使用strict=False参数来忽略不匹配的部分
@@ -129,7 +129,6 @@ def app():
 
             # 加载3D关节数据，假设它的形状是(N, J, 3)，其中N是帧数，J是关节数，3是坐标维度
             output_3d = np.load('output.npy')
-
             # 创建一个空的数组来存储投影后的2D关节数据，它的形状是(N, J, 2)
             output_2d = np.zeros((output_3d.shape[0], output_3d.shape[1], 2))
             # 对每一帧的3D关节数据进行投影
